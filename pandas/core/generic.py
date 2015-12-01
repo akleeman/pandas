@@ -2356,6 +2356,8 @@ class NDFrame(PandasObject):
         else:
             if name in self._info_axis:
                 return self[name]
+            if name == self.index.name:
+              return pd.Series(self.index, index=self.index, name=name)
             raise AttributeError("'%s' object has no attribute '%s'" %
                                  (type(self).__name__, name))
 
