@@ -3015,6 +3015,11 @@ class NDFrame(PandasObject):
         data = self._data.copy(deep=deep)
         return self._constructor(data).__finalize__(self)
 
+    # Defining these special function ensures that ``copy.copy(ndframe)`` behaves
+    # the same as ``ndframe.copy``.
+    # https://github.com/pydata/pandas/issues/8571
+    __copy__ = copy
+
     def _convert(self, datetime=False, numeric=False, timedelta=False,
                  coerce=False, copy=True):
         """

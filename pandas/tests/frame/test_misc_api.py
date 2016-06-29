@@ -2,8 +2,8 @@
 
 from __future__ import print_function
 # pylint: disable-msg=W0612,E1101
-from copy import deepcopy
 import sys
+import copy
 import nose
 from distutils.version import LooseVersion
 
@@ -330,7 +330,14 @@ class TestDataFrameMisc(tm.TestCase, SharedWithSparse, TestData):
         self.assertTrue((self.frame.values[:, 0] == 5).all())
 
     def test_deepcopy(self):
-        cp = deepcopy(self.frame)
+        cp = copy.deepcopy(self.frame)
+        series = cp['A']
+        series[:] = 10
+        for idx, value in compat.iteritems(series):
+            self.assertNotEqual(self.frame['A'][idx], value)
+
+    def test_copy_dot_copy(self):
+        cp = copy.copy(self.frame)
         series = cp['A']
         series[:] = 10
         for idx, value in compat.iteritems(series):

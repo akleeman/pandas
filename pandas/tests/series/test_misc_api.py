@@ -1,6 +1,7 @@
 # coding=utf-8
 # pylint: disable-msg=E1101,W0612
 
+import copy
 import numpy as np
 import pandas as pd
 
@@ -39,6 +40,11 @@ class SharedWithSparse(object):
         cp.index.name = 'foo'
         printing.pprint_thing(self.ts.index.name)
         self.assertIsNone(self.ts.index.name)
+
+    def test_copy_dot_copy(self):
+        cp = copy.copy(self.ts)
+        cp[0] += 1.
+        self.assertNotEqual(cp[0], self.ts[0])
 
     def test_append_preserve_name(self):
         result = self.ts[:5].append(self.ts[5:])
